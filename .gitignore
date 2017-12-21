@@ -16,3 +16,4 @@
 # MKL not needed
 License.MKL.ini
 MKL*
+*.MKL.ini
