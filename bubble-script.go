@@ -82,37 +82,45 @@ const sysscript = `
 		bt:write("import(\n\t\"trickyunits/mkl\"\n)\n\n\n")		-- line #72
 		bt:write("const sysscript = "..string.char(96).."\n")		-- line #73
 		for i,l in ipairs(lines) do		-- line #74
-			bt:write("\t"..l.."\t\t-- line #"..i.."\n")		-- line #75
-		end		-- line #76
-		bt:write(string.char(96).."\n\n")		-- line #77
-		bt:write("func init(){\n")		-- line #78
-		bt:write('\tmkl.Version("Bubble Base - bubble-script.go"," '..goversion..'")\n')		-- line #79
-		bt:write('\tmkl.Version("Bubble Base - bubble-script.lua","'.. lversion..'")\n')		-- line #80
-		bt:write('\tmkl.Lic    ("Bubble Base - bubble-script.go"," '.. llicense..'")\n')		-- line #81
-		bt:write('\tmkl.Lic    ("Bubble Base - bubble-script.lua","'.. llicense..'")\n')		-- line #82
-		bt:write('}\n\n');		-- line #83
-		bt:close()		-- line #84
-		print("Done")		-- line #85
-	end		-- line #86
-			-- line #87
+			io.write(i.."/"..#l.."\r")		-- line #75
+			bt:write("\t"..l.."\t\t-- line #"..i.."\n")		-- line #76
+		end		-- line #77
+		bt:write(string.char(96).."\n\n")		-- line #78
+		bt:write("func init(){\n")		-- line #79
+		bt:write('\tmkl.Version("Bubble Base - bubble-script.go"," '..goversion..'")\n')		-- line #80
+		bt:write('\tmkl.Version("Bubble Base - bubble-script.lua","'.. lversion..'")\n')		-- line #81
+		bt:write('\tmkl.Lic    ("Bubble Base - bubble-script.go"," '.. llicense..'")\n')		-- line #82
+		bt:write('\tmkl.Lic    ("Bubble Base - bubble-script.lua","'.. llicense..'")\n')		-- line #83
+		bt:write('}\n\n');		-- line #84
+		bt:close()		-- line #85
+		print("All Done!")		-- line #86
+	end		-- line #87
 			-- line #88
-	-- END BUILD ]]		-- line #89
-			-- line #90
+			-- line #89
+	-- END BUILD ]]		-- line #90
 			-- line #91
 			-- line #92
-	-- Desplays Script version. Meant for debugging only		-- line #93
-	function ScriptVersion()		-- line #94
-		return lversion		-- line #95
-	end		-- line #96
-			-- line #97
+			-- line #93
+	-- Desplays Script version. Meant for debugging only		-- line #94
+	function ScriptVersion()		-- line #95
+		return lversion		-- line #96
+	end		-- line #97
 			-- line #98
-			-- line #99
-			-- line #100
-			-- line #101
+	function b_assert(condition,errmsg)		-- line #99
+		if not condition then CRASH(errormsg) end		-- line #100
+	end		-- line #101
 			-- line #102
-	--[[ START BUILD		-- line #103
-	go_buildme()		-- line #104
-	-- END BUILD ]]		-- line #105
+	function Use(scriptfile)		-- line #103
+		b_assert(type(scriptfile)=="string","I expected a file name as a string as parameter of the use file, but I received a '"..type(scriptfile).."'")		-- line #104
+		BUBBLE_TRUE_USE(scriptfile,BUBBLE_VM_ID)		-- line #105
+	end		-- line #106
+			-- line #107
+			-- line #108
+			-- line #109
+			-- line #110
+	--[[ START BUILD		-- line #111
+	go_buildme()		-- line #112
+	-- END BUILD ]]		-- line #113
 `
 
 func init(){

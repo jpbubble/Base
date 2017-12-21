@@ -72,6 +72,7 @@ function go_buildme()
 	bt:write("import(\n\t\"trickyunits/mkl\"\n)\n\n\n")
 	bt:write("const sysscript = "..string.char(96).."\n")
 	for i,l in ipairs(lines) do
+		io.write(i.."/"..#l.."\r")
 		bt:write("\t"..l.."\t\t-- line #"..i.."\n")
 	end
 	bt:write(string.char(96).."\n\n")
@@ -82,7 +83,7 @@ function go_buildme()
 	bt:write('\tmkl.Lic    ("Bubble Base - bubble-script.lua","'.. llicense..'")\n')
 	bt:write('}\n\n');
 	bt:close()
-	print("Done")
+	print("All Done!")
 end
 
 
@@ -95,7 +96,14 @@ function ScriptVersion()
 	return lversion
 end
 
+function b_assert(condition,errmsg)
+	if not condition then CRASH(errormsg) end
+end
 
+function Use(scriptfile)
+	b_assert(type(scriptfile)=="string","I expected a file name as a string as parameter of the use file, but I received a '"..type(scriptfile).."'")
+	BUBBLE_TRUE_USE(scriptfile,BUBBLE_VM_ID)
+end
 
 
 
