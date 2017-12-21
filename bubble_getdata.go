@@ -12,7 +12,9 @@ package bubble
 
 import(
 	"strings"
-	"trickyunits/qll"
+	"trickyunits/mkl"
+	"trickyunits/qff"
+	"trickyunits/jcr6/jcr6main"
 	)
 
 func init(){
@@ -31,15 +33,15 @@ func GetData(a string) []byte {
 	}
 	switch from {
 		case "real":
-			return qff.GetData(file)
+			return qff.GetFile(file)
 		case "jcr":
-			if bubjcr==nil {
-				buberror("No JCR file set to get data from")
-				return []byte{}
-			} 
-			return JCR_B(bubjcr,a)
-		}
+			//if bubjcr==nil {
+			//	buberror("No JCR file set to get data from")
+			//	return []byte{}
+			//} 
+			if jcr6main.JCR6Error!="" { Error(jcr6main.JCR6Error); return []byte{} } 
+			return jcr6main.JCR_B(bubjcr,a)
 	}
-	buberror("bubble.GetData(\""+a+"\"): Complete malfunction!",true)
+	Fatal("bubble.GetData(\""+a+"\"): Complete malfunction!")
 	return []byte{}
 }

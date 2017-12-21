@@ -14,6 +14,7 @@ import(
 	"trickyunits/mkl"
 	"trickyunits/ansistring"
 	"log"
+	"fmt"
 )
 
 
@@ -28,6 +29,7 @@ type tBubbleConsole struct {
 
 // Contains the functions you can use to output log data.
 var Console tBubbleConsole
+//var startline = true
 
 
 func default_bc_write(color,txt string) {
@@ -65,19 +67,21 @@ func default_bc_write(color,txt string) {
 			c=ansistring.A_Green
 			f=ansistring.A_Bright
 	}
-	log.Print(ansistring.SCol(txt,c,f))
+	fmt.Print(ansistring.SCol(txt,c,f))
 }
 
 
 func default_bc_writeln(color,txt string) {
-	default_bc_write(color,txt+"\n")
+	default_bc_write(color,txt)
+	default_bc_write("White","\n")
+	//log.Print("!")
 }
 
 func default_bc_error(txt string,fatal ...bool) {
 	default_bc_writeln("Red","ERROR!")
 	default_bc_writeln("Yellow",txt)
 	if len(fatal)>0 {
-		if fatal[0] { log.Fatal(ansistring.SCol("This is a fatal error! Terminating!",Magenta,0)) }
+		if fatal[0] { log.Fatal(ansistring.SCol("This is a fatal error! Terminating!",ansistring.A_Magenta,0)) }
 	}
 }
 
@@ -88,8 +92,8 @@ func default_bc_warn(txt string) {
 
 
 // You can set your own functions with this to make Bubble write its logs and throw its errors.
-func SetConsole(wr,wrln func(col,txt string),er func(txt,fatal ...bool),wr func(txt)) {
-	Console = tBubbleConsole { Write:wr, WriteLn:wrln, Error:er, Warn:wr }
+func SetConsole(wrt,wrtln func(col,txt string),er func(txt string,fatal ...bool),wr func(txt string)) {
+	Console = tBubbleConsole { Write:wrt, WriteLn:wrtln, Error:er, Warn:wr }
 }
 
 // Resets the console to the default setting, which is through the standard "log" out put of Go.
@@ -101,14 +105,18 @@ func ConsoleToDefault(){
 func Write(col,txt string) { Console.Write(col,txt) }
 
 // Writes to the console and goes to a new line
-func WriteLn(col,txt string) { Console.Write(col,txt) }
+func WriteLn(col,txt string) { Console.WriteLn(col,txt) }
 
 // Throws an error
 func Error(txt string) { Console.Error(txt) }
 
+// Throws a fatal error
+func Fatal(txt string) { Console.Error(txt,true) }
+
 // Throws a warning
 func Warn(txt string) { Console.Warn(txt) }
 
+func buberror(txt string) { Error(txt) }
 
 
 func init(){
