@@ -10,5 +10,11 @@
 */
 package bubble
 
+import(
+	"trickyunits/mkl"
+)
+
 func init(){
+mkl.Version("Bubble Base - bubble_main.go","17.12.21")
+mkl.Lic    ("Bubble Base - bubble_main.go","Mozilla Public License 2.0")
 }
