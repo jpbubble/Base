@@ -17,3 +17,7 @@
 License.MKL.ini
 MKL*
 *.MKL.ini
+
+# Since my main system is mac I want to avoid these!
+.DS_Store
+._*
