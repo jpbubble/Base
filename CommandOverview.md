@@ -19,3 +19,10 @@ Use will take another script from the used JCR resource and add it to the existi
 - Use() cannot look outside of its JCR resource.
 - Since JCR is case INSENSITIVE so in the Use() command.
 - If the loaded script contains parse errors or if the script is not even present within the JCR resource a fatal error will be thrown.
+- File names can be given a few directives by using "__" as separators. A file having "linux" will only be seen when you are on linus and when it has "not_linux" it will be ignored by Linux but not by other systems. You get the idea?
+
+
+### UseDir(Dir)
+
+Use all scripts in a certain directory
+- All notes set in Use() basically apply here as well
