@@ -6,7 +6,7 @@
 	Mozilla Public License, v. 2.0. If a copy of the MPL was not 
 	distributed with this file, You can obtain one at 
 	http://mozilla.org/MPL/2.0/.
-        Version: 17.12.21
+        Version: 17.12.22
 ]]
 
 -----
@@ -48,7 +48,7 @@
 -- START BUILD
 
 mkl = { version=function(a,b) lversion=b lname=a end, lic=function(a,b) llicense=b end }
-mkl.version("Bubble Base - bubble-script.lua","17.12.21")
+mkl.version("Bubble Base - bubble-script.lua","17.12.22")
 mkl.lic    ("Bubble Base - bubble-script.lua","Mozilla Public License 2.0")
 
 function go_buildme()
