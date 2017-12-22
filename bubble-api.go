@@ -15,6 +15,7 @@ import(
 	//"fmt"
 	"path"
 	"strings"
+	"trickyunits/qstr"
 	"trickyunits/jcr6/jcr6main"
 	"github.com/Shopify/go-lua"
 	"runtime"
@@ -35,7 +36,7 @@ func bubble_Use(l *lua.State) int {
 	scriptfile:=lua.CheckString(l,1)
 	vm:=lua.CheckString(l,2)
 	s:=strings.ToUpper(vm)
-	sp:=strings.Split(s,"__")
+	sp:=strings.Split(qstr.StripAll(s),"__")
 	if len(sp)>1 {
 		for i:=1;i<len(sp);i++{
 			switch(strings.ToLower(sp[i])){
