@@ -68,7 +68,8 @@ func bubble_Use(l *lua.State) int {
 			Console.WriteLn("Cyan",scriptfile)
 		}
 		vms[s].used[us]=true
-		b:=jcr6main.JCR_String(bubjcr,scriptfile)
+		scriptlines:=jcr6main.JCR_ListEntry(bubjcr,scriptfile)
+		b:=preprocess(scriptlines,vm) //jcr6main.JCR_String(bubjcr,scriptfile)
 		if jcr6main.JCR6Error!="" { Fatal(jcr6main.JCR6Error) }
 		err:=lua.LoadBuffer(ll , b, path.Base(scriptfile), "")
 		if err!=nil { Fatal(err.Error()) }

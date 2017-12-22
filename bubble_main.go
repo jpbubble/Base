@@ -17,6 +17,7 @@ import(
 	"trickyunits/ansistring"
 	"trickyunits/jcr6/jcr6main"
 	"github.com/Shopify/go-lua"
+//	"runtime"
 )
 
 
@@ -41,7 +42,9 @@ func SetJCR(jcrfile string) jcr6main.TJCR6Dir{
 type TBubble struct {
 	l *lua.State
 	used map[string] bool
+	defs map[string] bool
 }
+
 
 var vms = map[string] TBubble {}
 
@@ -56,7 +59,7 @@ func CreateBubble(id string) *lua.State {
 	l.Call(0,0)
 	lua.LoadString(l,sysscript)
 	l.Call(0,0)
-	vms[s] = TBubble { l,map[string] bool{} }
+	vms[s] = TBubble { l,map[string] bool{},map[string] bool{} }
 	return l
 }
 
