@@ -50,6 +50,7 @@ func CreateBubble(id string) *lua.State {
 	dbg("Creating bubble: "+s)
 	l := lua.NewState()
 	lua.BaseOpen(l)
+	lua.OpenLibraries(l)
 	initbubbleapi(s,l)
 	lua.LoadString(l,"BUBBLE_VM_ID = '"+s+"'") // Please note this variable may NEVER be changed or bad stuff may happen!
 	l.Call(0,0)

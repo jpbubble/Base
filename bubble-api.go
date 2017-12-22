@@ -46,6 +46,15 @@ func bubble_Use(l *lua.State) int {
 	return 0
 }
 
+func bubble_jcrdir(l *lua.State) int {
+	ret:="local ret = {}\n"
+	for _,e:=range bubjcr.Entries {
+		ret+="ret[#ret+1]=\""..e.Entry.."\"\n"
+	}
+	ret+="\n\n\nreturn ret"
+	lua.PushString(l,ret)
+	return 1
+}
 
 
 
@@ -60,6 +69,7 @@ func bubble_Use(l *lua.State) int {
 func initbubbleapi(bub string,l *lua.State){
 		lua.SetFunctions(l, []lua.RegistryFunction{ 
 			{ "BUBBLE_TRUE_USE",bubble_Use },
+			{ "BUBBLE_JCR_DIR",bubble_jcrdir },
 			{ "CRASH",bubble_CRASH },
 			},0)
 

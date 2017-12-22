@@ -100,31 +100,194 @@ const sysscript = `
 	-- END BUILD ]]		-- line #90
 			-- line #91
 			-- line #92
-			-- line #93
-	-- Desplays Script version. Meant for debugging only		-- line #94
-	function ScriptVersion()		-- line #95
-		return lversion		-- line #96
-	end		-- line #97
+	-- Boolean features		-- line #93
+	boolyn = { [true] = "yes", [false] =  "no" }		-- line #94
+	boolbt = { [true] =     1, [false] =     0 }		-- line #95
+	boolon = { [true] =  "on", [false] = "off" }		-- line #96
+			-- line #97
 			-- line #98
-	function b_assert(condition,errmsg)		-- line #99
-		if not condition then CRASH(errormsg) end		-- line #100
-	end		-- line #101
-			-- line #102
-	function Use(scriptfile)		-- line #103
-		b_assert(type(scriptfile)=="string","I expected a file name as a string as parameter of the use file, but I received a '"..type(scriptfile).."'")		-- line #104
-		BUBBLE_TRUE_USE(scriptfile,BUBBLE_VM_ID)		-- line #105
-	end		-- line #106
-			-- line #107
-			-- line #108
-			-- line #109
+	-- system value		-- line #99
+	svaltypes = {		-- line #100
+			-- line #101
+	   ['string']   = function(a) return a end,		-- line #102
+	   ['number']   = function(a) return a end,		-- line #103
+	   ['table']    = function(a) return serialize('<table>',a) end,		-- line #104
+	   ['function'] = function(a) return "<function>" end,		-- line #105
+	   ['nil']      = function(a) return "<nil>" end,		-- line #106
+	   ['unknown']  = function(a) return "<unknown type: "..type(a)..">" end,		-- line #107
+	   ['boolean']  = function(a) if a then return "true" else return "false" end end		-- line #108
+	   }		-- line #109
 			-- line #110
-	--[[ START BUILD		-- line #111
-	go_buildme()		-- line #112
-	-- END BUILD ]]		-- line #113
+	function sval(a)		-- line #111
+	local f = svaltypes[type(a)] or svaltypes.unknown		-- line #112
+	return f(a)		-- line #113
+	end		-- line #114
+			-- line #115
+	function each(a) -- BLD: Can be used if you only need the values in a nummeric indexed tabled. (as ipairs will always return the indexes as well, regardeless if you need them or not)		-- line #116
+		local i=0		-- line #117
+		if type(a)~="table" then		-- line #118
+			--Console.Write("Each received a "..type(a).."!",255,0,0)		-- line #119
+			return nil		-- line #120
+		end		-- line #121
+		return function()		-- line #122
+			i=i+1		-- line #123
+			if a[i] then return a[i] end		-- line #124
+	    end		-- line #125
+	end		-- line #126
+			-- line #127
+	function ieach(a) -- BLD: Same as each, but not in reversed order		-- line #128
+		local i=#a+1		-- line #129
+		if type(a)~="table" then		-- line #130
+		--Console.Write("IEach received a "..type(a).."!",255,0,0)		-- line #131
+			return nil		-- line #132
+		end		-- line #133
+		return function()		-- line #134
+			i=i-1		-- line #135
+			if a[i] then return a[i] end		-- line #136
+		end		-- line #137
+	end		-- line #138
+			-- line #139
+			-- line #140
+	--[[		-- line #141
+			-- line #142
+	    This function is written by Michal Kottman.		-- line #143
+	    http://stackoverflow.com/questions/15706270/sort-a-table-in-lua		-- line #144
+			-- line #145
+	]]		-- line #146
+			-- line #147
+	function spairs(t, order)		-- line #148
+	    -- collect the keys		-- line #149
+	    local keys = {}		-- line #150
+	    for k in pairs(t) do keys[#keys+1] = k end		-- line #151
+			-- line #152
+	    -- if order function given, sort by it by passing the table and keys a, b,		-- line #153
+	    -- otherwise just sort the keys 		-- line #154
+	    if order then		-- line #155
+	        table.sort(keys, function(a,b) return order(t, a, b) end)		-- line #156
+	    else		-- line #157
+	        table.sort(keys)		-- line #158
+	    end		-- line #159
+			-- line #160
+	    -- return the iterator function		-- line #161
+	    local i = 0		-- line #162
+	    return function()		-- line #163
+	        i = i + 1		-- line #164
+	        if keys[i] then		-- line #165
+	            return keys[i], t[keys[i]]		-- line #166
+	        end		-- line #167
+	    end		-- line #168
+	end		-- line #169
+			-- line #170
+			-- line #171
+	-- String features --		-- line #172
+	upper = string.upper		-- line #173
+	lower = string.lower		-- line #174
+	chr = string.char		-- line #175
+	printf = string.format		-- line #176
+	replace = string.gsub		-- line #177
+	rep = string.rep		-- line #178
+	substr = string.sub		-- line #179
+			-- line #180
+			-- line #181
+	function cprintf(a,b)		-- line #182
+		print(printf(a,b))		-- line #183
+	end		-- line #184
+			-- line #185
+	function left(s,l)		-- line #186
+	return substr(s,1,l)		-- line #187
+	end		-- line #188
+			-- line #189
+	function right(s,l)		-- line #190
+	local ln = l or 1		-- line #191
+	local st = s or "nostring"		-- line #192
+	-- return substr(st,string.len(st)-ln,string.len(st))		-- line #193
+	return substr(st,-ln,-1)		-- line #194
+	end 		-- line #195
+			-- line #196
+	function mid(s,o,l)		-- line #197
+	local ln=l or 1		-- line #198
+	local of=o or 1		-- line #199
+	local st=s or ""		-- line #200
+	return substr(st,of,(of+ln)-1)		-- line #201
+	end 		-- line #202
+			-- line #203
+			-- line #204
+	function trim(s)		-- line #205
+	  return (s:gsub("^%s*(.-)%s*$", "%1"))		-- line #206
+	end		-- line #207
+	-- from PiL2 20.4		-- line #208
+			-- line #209
+	function findstuff(haystack,needle) -- BLD: Returns the position on which a substring (needle) is found inside a string or (array)table (haystrack). If nothing if found it will return nil.<p>Needle must be a string if haystack is a string, if haystack is a table, needle can be any type.		-- line #210
+	local ret = nil		-- line #211
+	local i		-- line #212
+	for i=1,len(haystack) do		-- line #213
+	    if type(haystack)=='table'  and needle==haystack[i] then ret = ret or i end		-- line #214
+	    if type(haystack)=='string' and needle==mid(haystack,i,len(needle)) then ret = ret or i end		-- line #215
+	    -- rint("finding needle: "..needle) if ret then print("found at: "..ret) end print("= Checking: "..i.. " >> "..mid(haystack,i,len(needle)))		-- line #216
+	    end		-- line #217
+	return ret    		-- line #218
+	end		-- line #219
+			-- line #220
+	function safestring(s)		-- line #221
+	local allowed = "qwertyuiopasdfghjklzxcvbnmmQWERTYUIOPASDFGHJKLZXCVBNM 12345678890-_=+!@#$%^&*()[]{};:|,.<>/?"		-- line #222
+	local i		-- line #223
+	local safe = true		-- line #224
+	local alt = ""		-- line #225
+	assert ( type(s)=='string' , "safestring expects a string not a "..type(s) )		-- line #226
+	for i=1,len(s) do		-- line #227
+	    safe = safe and (findstuff(allowed,mid(s,i,1))~=nil)		-- line #228
+	    alt = alt .."\\"..string.byte(mid(s,i,1),1)		-- line #229
+	    end		-- line #230
+	-- print("DEBUG: Testing string"); if safe then print("The string "..s.." was safe") else print("The string "..s.." was not safe and was reformed to: "..alt) end    		-- line #231
+	local ret = { [true] = s, [false]=alt }		-- line #232
+	-- print("returning "..ret[safe])		-- line #233
+	return ret[safe]     		-- line #234
+	end 		-- line #235
+			-- line #236
+			-- line #237
+			-- line #238
+			-- line #239
+			-- line #240
+	-- Desplays Script version. Meant for debugging only		-- line #241
+	function ScriptVersion()		-- line #242
+		return lversion		-- line #243
+	end		-- line #244
+			-- line #245
+	function b_assert(condition,errmsg)		-- line #246
+		if not condition then CRASH(errormsg) end		-- line #247
+	end		-- line #248
+			-- line #249
+	function JCR_Dir()		-- line #250
+		local t = BUBBLE_JCR_DIR()		-- line #251
+		local ggetdir,e = load(JCR_GetDir(path))		-- line #252
+		if not ggetdir then Error(e) return nil end		-- line #253
+		--print(type(ggetdir))		-- line #254
+		return ggetdir()		-- line #255
+	end getdir = GetDir		-- line #256
+			-- line #257
+	function Use(scriptfile)		-- line #258
+		b_assert(type(scriptfile)=="string","I expected a file name as a string as parameter of the use file, but I received a '"..type(scriptfile).."'")		-- line #259
+		BUBBLE_TRUE_USE(scriptfile,BUBBLE_VM_ID)		-- line #260
+	end		-- line #261
+			-- line #262
+	function UseDir(directory)		-- line #263
+		local d = JCR_Dir()		-- line #264
+		for f in each(d) do		-- line #265
+			if left(f,#directory)==directory then Use(f) end		-- line #266
+		end		-- line #267
+	end		-- line #268
+			-- line #269
+			-- line #270
+			-- line #271
+			-- line #272
+			-- line #273
+	--[[ START BUILD		-- line #274
+	go_buildme()		-- line #275
+	-- END BUILD ]]		-- line #276
 `
 
 func init(){
-	mkl.Version("Bubble Base - bubble-script.go"," 17.12.21")
+	mkl.Version("Bubble Base - bubble-script.go"," 17.12.22")
 	mkl.Version("Bubble Base - bubble-script.lua","17.12.21")
 	mkl.Lic    ("Bubble Base - bubble-script.go"," Mozilla Public License 2.0")
 	mkl.Lic    ("Bubble Base - bubble-script.lua","Mozilla Public License 2.0")
