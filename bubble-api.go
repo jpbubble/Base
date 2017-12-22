@@ -17,6 +17,7 @@ import(
 	"strings"
 	"trickyunits/jcr6/jcr6main"
 	"github.com/Shopify/go-lua"
+	"runtime"
 )
 
 
@@ -34,6 +35,27 @@ func bubble_Use(l *lua.State) int {
 	scriptfile:=lua.CheckString(l,1)
 	vm:=lua.CheckString(l,2)
 	s:=strings.ToUpper(vm)
+	sp:=strings.Split(s,"__")
+	if len(sp)>1 {
+		for i:=1;i<len(sp);i++{
+			switch(strings.ToLower(sp[i])){
+				case "win","windows":
+					if runtime.GOOS!="windows" { return 0 }
+				case "mac","darwin":
+					if runtime.GOOS!="darwin" { return 0 }
+				case "lin","linux":
+					if runtime.GOOS!="linux" { return 0 }
+				case "not_win","not_windows":
+					if runtime.GOOS=="windows" { return 0 }
+				case "not_mac","not_darwin": 
+					if runtime.GOOS=="darwin" { return 0 }
+				case "not_lin","non_linux":
+					if runtime.GOOS=="linux" { return 0 }
+				default:
+					Warn("Unknown directive found in filename "+sp[i]+"\nIt may be okay now, but keep in mind that conflicts with future versions of Bubble are possible!")
+			}
+		}
+	}
 	dbg("Use >> vm="+s+"; script="+scriptfile)
 	//fmt.Print("Use("+scriptfile+","+vm+")")
 	if _,ok:=vms[s];!ok { Fatal("Unknown VM: "+s) }
@@ -59,10 +81,10 @@ func bubble_Use(l *lua.State) int {
 func bubble_jcrdir(l *lua.State) int {
 	ret:="local ret = {}\n"
 	for _,e:=range bubjcr.Entries {
-		ret+="ret[#ret+1]=\""..e.Entry.."\"\n"
+		ret+="ret[#ret+1]=\""+e.Entry+"\"\n"
 	}
 	ret+="\n\n\nreturn ret"
-	lua.PushString(l,ret)
+	l.PushString(ret)
 	return 1
 }
 
