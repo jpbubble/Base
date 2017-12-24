@@ -6,7 +6,7 @@
 	Mozilla Public License, v. 2.0. If a copy of the MPL was not 
 	distributed with this file, You can obtain one at 
 	http://mozilla.org/MPL/2.0/.
-        Version: 17.12.22
+        Version: 17.12.24
 */
 package bubble
 
@@ -30,7 +30,7 @@ var bubjcr jcr6main.TJCR6Dir
 func dbg(msg string) { if debugchat {log.Print(ansistring.SCol(msg,4,0)) }}
 
 func init(){
-mkl.Version("Bubble Base - bubble_main.go","17.12.22")
+mkl.Version("Bubble Base - bubble_main.go","17.12.24")
 mkl.Lic    ("Bubble Base - bubble_main.go","Mozilla Public License 2.0")
 }
 
@@ -55,6 +55,7 @@ func CreateBubble(id string) *lua.State {
 	lua.BaseOpen(l)
 	lua.OpenLibraries(l)
 	initbubbleapi(s,l)
+	bINI(l)
 	lua.LoadString(l,"BUBBLE_VM_ID = '"+s+"'") // Please note this variable may NEVER be changed or bad stuff may happen!
 	l.Call(0,0)
 	lua.LoadString(l,sysscript)

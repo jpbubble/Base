@@ -6,7 +6,7 @@
 	Mozilla Public License, v. 2.0. If a copy of the MPL was not 
 	distributed with this file, You can obtain one at 
 	http://mozilla.org/MPL/2.0/.
-        Version: 17.12.21
+        Version: 17.12.24
 */
 package bubble
 
@@ -26,6 +26,8 @@ type tBubbleConsole struct {
 	Warn func(txt string)
 }
 
+
+var consetbefore = false
 
 // Contains the functions you can use to output log data.
 var Console tBubbleConsole
@@ -94,6 +96,7 @@ func default_bc_warn(txt string) {
 // You can set your own functions with this to make Bubble write its logs and throw its errors.
 func SetConsole(wrt,wrtln func(col,txt string),er func(txt string,fatal ...bool),wr func(txt string)) {
 	Console = tBubbleConsole { Write:wrt, WriteLn:wrtln, Error:er, Warn:wr }
+	consetbefore = true
 }
 
 // Resets the console to the default setting, which is through the standard "log" out put of Go.
@@ -120,7 +123,7 @@ func buberror(txt string) { Error(txt) }
 
 
 func init(){
-mkl.Version("Bubble Base - bubble-console.go","17.12.21")
+mkl.Version("Bubble Base - bubble-console.go","17.12.24")
 mkl.Lic    ("Bubble Base - bubble-console.go","Mozilla Public License 2.0")
-ConsoleToDefault()
+if !consetbefore { ConsoleToDefault() } // set this way to prevent the default popping up due to init conflicts.
 }
