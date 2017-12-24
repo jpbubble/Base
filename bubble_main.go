@@ -57,9 +57,9 @@ func CreateBubble(id string) *lua.State {
 	initbubbleapi(s,l)
 	bINI(l)
 	lua.LoadString(l,"BUBBLE_VM_ID = '"+s+"'") // Please note this variable may NEVER be changed or bad stuff may happen!
-	l.Call(0,0)
+	Call(l,0,0)
 	lua.LoadString(l,sysscript)
-	l.Call(0,0)
+	Call(l,0,0)
 	vms[s] = TBubble { l,map[string] bool{},map[string] bool{} }
 	return l
 }
