@@ -6,7 +6,7 @@
 	Mozilla Public License, v. 2.0. If a copy of the MPL was not 
 	distributed with this file, You can obtain one at 
 	http://mozilla.org/MPL/2.0/.
-        Version: 17.12.22
+        Version: 17.12.26
 */
 package bubble
 
@@ -69,6 +69,7 @@ func bubble_Use(l *lua.State) int {
 		}
 		vms[s].used[us]=true
 		scriptlines:=jcr6main.JCR_ListEntry(bubjcr,scriptfile)
+		if jcr6main.JCR6Error!="" { Fatal(jcr6main.JCR6Error) }
 		b:=preprocess(scriptlines,vm) //jcr6main.JCR_String(bubjcr,scriptfile)
 		if jcr6main.JCR6Error!="" { Fatal(jcr6main.JCR6Error) }
 		err:=lua.LoadBuffer(ll , b, path.Base(scriptfile), "")

@@ -6,7 +6,7 @@
 	Mozilla Public License, v. 2.0. If a copy of the MPL was not 
 	distributed with this file, You can obtain one at 
 	http://mozilla.org/MPL/2.0/.
-        Version: 17.12.24
+        Version: 17.12.26
 */
 package bubble
 
@@ -30,7 +30,7 @@ var bubjcr jcr6main.TJCR6Dir
 func dbg(msg string) { if debugchat {log.Print(ansistring.SCol(msg,4,0)) }}
 
 func init(){
-mkl.Version("Bubble Base - bubble_main.go","17.12.24")
+mkl.Version("Bubble Base - bubble_main.go","17.12.26")
 mkl.Lic    ("Bubble Base - bubble_main.go","Mozilla Public License 2.0")
 }
 
@@ -69,6 +69,14 @@ func GetBubble(id string) *lua.State {
 	return vms[s].l
 }
 
+func TextScript(id,script,name string) {
+	s:=strings.ToUpper(id)
+	l:=GetBubble(s)
+	err:=lua.LoadBuffer(l , script, name, "")
+	if err!=nil { Fatal(err.Error()) }
+	Call(l,0,0)
+}
+
 // Loads a script to a VM with id <id>
 // If the script does not exist it will be created, if it does exist the current stuff will be added.
 func LoadScript(id,script string){
@@ -83,7 +91,7 @@ func LoadScript(id,script string){
 	uscript:="Use('"+script+"')\n"
 	dbg(uscript)
 	lua.LoadString(l,uscript)
-	l.Call(0,0)
+	Call(l,0,0)
 }
 
 
